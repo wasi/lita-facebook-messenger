@@ -4,9 +4,10 @@ module Lita
   module Handlers
     class FacebookMessenger < Handler
       http.get 'facebook' do |request, response|
-        params = JSON.parse(request.body.read)
-        log.debug "incoming request 'get facebook': #{params.inspect}"
-        response.body params['hub.challenge']
+        log.debug "incoming request 'get facebook': #{request.env["QUERY_STRING"]}"
+        if request.env["QUERY_STRING"] =~ /hub\.challenge=(\d+)/
+          response.body << $1
+        end
         response.finish
       end
 
