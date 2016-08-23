@@ -15,21 +15,6 @@ module Lita
           end
         end
 
-        # if params['token'] != config.token
-        #   response.status = 401
-        # else
-        #   subdomain, sender, vchannel, username, text = params.values_at(*INNEED_PARAMS)
-        #   # Creates a new room with the given ID, or merges and saves supplied
-        #   user = Lita::User.create(sender, {
-        #     name: username,
-        #     subdomain: subdomain
-        #   })
-        #   source = Lita::Source.new(user: user, room: vchannel)
-        #   message = Lita::Message.new(robot, format_text(text.to_s), source)
-        #   robot.receive(message)
-        # end
-
-
         response.finish
       end
 
