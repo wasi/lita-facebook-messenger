@@ -3,6 +3,10 @@ require "json"
 module Lita
   module Handlers
     class FacebookMessenger < Handler
+      http.get 'facebook' do |request, response|
+        response.finish
+      end
+
       http.post 'facebook' do |request, response|
         params = JSON.parse(request.body.read)
         puts params.inspect
