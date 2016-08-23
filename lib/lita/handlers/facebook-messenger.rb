@@ -4,12 +4,15 @@ module Lita
   module Handlers
     class FacebookMessenger < Handler
       http.get 'facebook' do |request, response|
+        params = JSON.parse(request.body.read)
+        log.debug "incoming request 'get facebook': #{params.inspect}"
+        response.body params['hub.challenge']
         response.finish
       end
 
       http.post 'facebook' do |request, response|
         params = JSON.parse(request.body.read)
-        puts params.inspect
+        log.debug "incoming request 'post facebook': #{params.inspect}"
 
         params['entry'.freeze].each do |entry|
           # Facebook may batch several items in the 'messaging' array during
