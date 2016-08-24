@@ -12,7 +12,6 @@ module Lita
       end
 
       http.post 'facebook' do |request, response|
-        log.debug "raw data: #{request.body.read}"
         params = JSON.parse(request.body.read)
         log.debug "incoming request 'post facebook': #{params.inspect}"
 
