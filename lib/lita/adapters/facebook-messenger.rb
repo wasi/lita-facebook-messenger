@@ -20,7 +20,7 @@ module Lita
 
       def run
         Bot.on :message do |message|
-          log.info "---> #{message.inspect}"
+          log.debug "#{message.inspect}"
           message.id          # => 'mid.1457764197618:41d102a3e1ae206a38'
           message.sender      # => { 'id' => '1008372609250235' }
           message.seq         # => 73
@@ -37,8 +37,16 @@ module Lita
 
           chat = Lita::Room.new(user_id)
           source = Lita::Source.new(user: user, room: chat)
-          msg = Lita::Message.new(robot, message.text, source)
-          log.info "Incoming Message: text=\"#{message.text}\" uid=#{source.room}"
+
+          attachment = message.attachments.first
+          if attachment && attachment["type"] == "location"
+            text = "/location #{attachment["payload"]["coordinates"]["lat"]} #{attachment["payload"]["coordinates"]["long"]}"
+          else
+            text = message.text
+          end
+
+          msg = Lita::Message.new(robot, text, source)
+          log.info "Incoming Message: text=\"#{text}\" uid=#{source.room}"
           robot.receive(msg)
 
           # Bot.deliver(
