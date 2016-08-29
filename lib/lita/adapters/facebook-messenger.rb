@@ -97,7 +97,7 @@ module Lita
                     payload: {
                       template_type: 'button',
                       text: message,
-                      buttons: opts[:keyboard].map{|b| { type: 'postback', title: b, payload: b } }
+                      buttons: opts[:keyboard].map{|b| b.is_a?(Hash) ? b : { type: 'postback', title: b, payload: b } }
                     }
                   }
                 }
@@ -105,6 +105,8 @@ module Lita
           end
 
           message_data ||= { text: message }
+
+          log.debug "outgoing message: #{message_data.inspect}"
 
           Bot.deliver(
             recipient: {
