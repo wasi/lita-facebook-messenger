@@ -48,11 +48,13 @@ module Lita
             text = message.text
           end
 
-          test ||= ""
-
-          msg = Lita::Message.new(robot, text, source)
-          log.info "Incoming Message: text=\"#{text}\" uid=#{source.room}"
-          robot.receive(msg)
+          unless text.nil?
+            msg = Lita::Message.new(robot, text, source)
+            log.info "Incoming Message: text=\"#{text}\" uid=#{source.room}"
+            robot.receive(msg)
+          else
+            log.debug "Incoming Message with no content"
+          end
 
           # Bot.deliver(
           #   recipient: message.sender,
