@@ -48,12 +48,14 @@ module Lita
             text = message.text
           end
 
-          unless text.nil?
+          if !text.nil? && message.seq > user.metadata["fb_seq"].to_i
+            user.metadata["fb_seq"] = message.seq
+            user.save
             msg = Lita::Message.new(robot, text, source)
             log.info "Incoming Message: text=\"#{text}\" uid=#{source.room}"
             robot.receive(msg)
           else
-            log.debug "Incoming Message with no content"
+            log.debug "Incoming Message with no content or dup"
           end
 
           # Bot.deliver(
