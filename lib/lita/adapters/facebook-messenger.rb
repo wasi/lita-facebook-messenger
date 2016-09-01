@@ -48,6 +48,7 @@ module Lita
             text = message.text
           end
 
+          log.debug "#{user.id} seq: #{user.metadata["fb_seq"].to_i}"
           if !text.nil? && message.seq > user.metadata["fb_seq"].to_i
             user.metadata["fb_seq"] = message.seq
             user.save
@@ -57,17 +58,10 @@ module Lita
           else
             log.debug "Incoming Message with no content or dup"
           end
-
-          # Bot.deliver(
-          #   recipient: message.sender,
-          #   message: {
-          #     text: 'Hello, human!'
-          #   }
-          # )
         end
 
         Bot.on :postback do |message|
-          log.info "---> #{message.inspect}"
+          log.info "#{message.inspect}"
 
           user_id = message.sender['id']
           user = Lita::User.find_by_name(user_id)
@@ -82,12 +76,6 @@ module Lita
           log.info "Incoming Message: text=\"#{message.payload}\" uid=#{source.room}"
           robot.receive(msg)
 
-          # Bot.deliver(
-          #   recipient: message.sender,
-          #   message: {
-          #     text: 'Hello, human!'
-          #   }
-          # )
         end
         sleep
       end
